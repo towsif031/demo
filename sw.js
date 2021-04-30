@@ -1,6 +1,7 @@
 const cacheName = 'v1';
 
 const cacheAssets = [
+	'/demo/',
 	'/demo/index.html',
 	'/demo/assets/css/main.css.map',
 	'/demo/assets/css/main.css',
