@@ -43,25 +43,17 @@ self.addEventListener('activate', (e) => {
 // Call Fetch Event
 self.addEventListener('fetch', (e) => {
 	console.log('Service Worker: Fetching');
-	// e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-
-	// e.respondWith(
-	// 	fetch(e.request).catch(() => {
-	// 		return caches.match(e.request);
-	// 	})
-	// );
 
 	e.respondWith(
-		caches.open(cacheName).then((cache) => {
-			return cache.match(e.request).then((response) => {
-				return (
-					response ||
-					fetch(e.request).then((response) => {
-						const responseClone = response.clone();
-						cache.put(e.request, responseClone);
-					})
-				);
-			});
+		caches.open(cacheName).then(async (cache) => {
+			const response = await cache.match(e.request);
+			return (
+				response ||
+				fetch(e.request).then((response_1) => {
+					const responseClone = response_1.clone();
+					cache.put(e.request, responseClone);
+				})
+			);
 		})
 	);
 });
