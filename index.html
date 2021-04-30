@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Real-time Rubik's Cube Solver</title>
+		<!-- css -->
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<!-- scripts -->
+		<script>
+			function onOpenCvReady() {
+				console.log('OpenCV.js loaded successfully.');
+			}
+		</script>
+		<script
+			async
+			src="assets/js/vendor/opencv.js"
+			onload="onOpenCvReady();"
+		></script>
+		<script
+			defer
+			src="assets/js/cube.js"
+			onload="createVirtualCube();"
+		></script>
+		<script defer src="assets/js/main.js"></script>
+		<script defer src="assets/js/solver.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h2>Real-time Rubik's Cube Solver</h2>
+			</div>
+			<div class="content">
+				<div class="main-content">
+					<!-- display webcam outputs, virtual cube and controls -->
+					<div class="media-and-controls-section">
+						<div class="media-and-controls-wrapper">
+							<!-- video content -->
+							<div class="video-content-section">
+								<!-- display video player -->
+								<div class="video-player-container">
+									<!-- original video -->
+									<div class="input-content">
+										<div class="video-wrapper">
+											<video
+												id="video"
+												src="#"
+												loop
+												controls
+												muted
+											></video>
+										</div>
+									</div>
+									<!-- display processed video -->
+									<div class="output-content">
+										<div class="video-view-wrapper">
+											<div
+												class="output-video"
+												id="outputVideoWrapper"
+											>
+												<canvas
+													id="output-canvas"
+												></canvas>
+												<!-- floating button to Start the Process -->
+												<button
+													class="start-processing-btn"
+													onclick="startProcess()"
+												></button>
+											</div>
+											<div class="init-video-frame">
+												<div
+													class="webcam-play-btn"
+													onclick="startWebcam()"
+												>
+													<div
+														class="triangle-icon"
+														style="
+															clip-path: polygon(
+																0% 0%,
+																50% 25%,
+																0% 50%
+															);
+														"
+													></div>
+												</div>
+												<div
+													id="videoFile"
+													hidden
+												></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- display input patterns -->
+								<div class="functional-section-wrapper">
+									<div class="input-pattern-views-wrapper">
+										<div
+											class="input-pattern-views-container"
+										>
+											<!-- display input cubeFace pattern of each step -->
+											<div
+												class="input-pattern-view"
+											></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- virtual cube -->
+							<div class="virtual-cube-viewer-section">
+								<div
+									class="virtual-cube-viewer-and-controller-container"
+								>
+									<div class="cube-view">
+										<!-- virtual cube container -->
+										<div class="cube-container"></div>
+										<!-- arrow controller buttons -->
+										<div class="arrowController-container">
+											<div class="arrowController">
+												<div></div>
+												<div
+													class="arrowController-btn-container"
+												>
+													<button
+														class="arrowController-btn up-btn"
+														onclick="rotateUp()"
+													>
+														<i
+															class="arrow-btn up-arrow-btn"
+														></i>
+													</button>
+												</div>
+												<div></div>
+												<div
+													class="arrowController-btn-container"
+												>
+													<button
+														class="arrowController-btn left-btn"
+														onclick="rotateLeft()"
+													>
+														<i
+															class="arrow-btn left-arrow-btn"
+														></i>
+													</button>
+												</div>
+												<div
+													class="arrowController-btn-container"
+												>
+													<button
+														class="arrowController-btn middle-btn"
+														disabled
+													>
+														<i
+															class="arrow-btn circle-btn"
+														></i>
+													</button>
+												</div>
+												<div
+													class="arrowController-btn-container"
+												>
+													<button
+														class="arrowController-btn right-btn"
+														onclick="rotateRight()"
+													>
+														<i
+															class="arrow-btn right-arrow-btn"
+														></i>
+													</button>
+												</div>
+												<div></div>
+												<div
+													class="arrowController-btn-container"
+												>
+													<button
+														class="arrowController-btn down-btn"
+														onclick="rotateDown()"
+													>
+														<i
+															class="arrow-btn down-arrow-btn"
+														></i>
+													</button>
+												</div>
+												<div></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- solve button section -->
+								<div class="solve-btn-section-wrapper">
+									<div class="solve-btn-container">
+										<button
+											class="solve-btn"
+											onclick="solve()"
+										>
+											Solve
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- display results -->
+					<div class="results-section">
+						<!-- steps viewer -->
+						<div class="steps-content-wrapper">
+							<div class="steps-container">
+								<div class="steps-actions">
+									<div class="steps-count-viewer-wrapper">
+										<div class="steps-count">
+											<div class="steps-count-text">
+												<!-- Total Steps to Solve: 0 -->
+											</div>
+										</div>
+									</div>
+									<div class="auto-solver-buttons-wrapper">
+										<button
+											class="go-back-to-unsolved-state-btn"
+										>
+											<!-- Go Back to Unsolved State -->
+										</button>
+										<button
+											class="auto-solver-btn"
+											disabled
+										>
+											<!-- Auto Solve -->
+										</button>
+									</div>
+								</div>
+								<div class="steps-to-follow"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<div class="footer-legal-copyright">
+					Copyright © 2021
+					<a href="https://www.uxd.co.jp/" target="_blank"
+						>Ultra-X Asia Pacific</a
+					>. All rights reserved.
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
