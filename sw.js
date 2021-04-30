@@ -44,9 +44,24 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
 	console.log('Service Worker: Fetching');
 	// e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+
+	// e.respondWith(
+	// 	fetch(e.request).catch(() => {
+	// 		return caches.match(e.request);
+	// 	})
+	// );
+
 	e.respondWith(
-		fetch(e.request).catch(function () {
-			return caches.match(e.request);
+		caches.open(cacheName).then((cache) => {
+			return cache.match(e.request).then((response) => {
+				return (
+					response ||
+					fetch(e.request).then((response) => {
+						const responseClone = response.clone();
+						cache.put(e.request, responseClone);
+					})
+				);
+			});
 		})
 	);
 });
